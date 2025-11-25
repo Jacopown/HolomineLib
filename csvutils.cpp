@@ -3,25 +3,58 @@
 #include <sstream>
 #include <vector>
 #include <string>
+#include "csvutils.h"
 
 using namespace std;
 
-vector<vector<string>> readCSV(const std::string& filename) {
-    std::vector<std::vector<std::string>> data;
-    std::ifstream file(filename);
+class DataFrame {
+public:
+        vector<int> 
+        DataFrame();
+        DataFrame(DataFrame &&) = default;
+        DataFrame(const DataFrame &) = default;
+        DataFrame &operator=(DataFrame &&) = default;
+        DataFrame &operator=(const DataFrame &) = default;
+        ~DataFrame();
+
+private:
+       0x01 02 03 08
+               08 03 02 01 
+
+0001 = 1
+0010 = 2
+0011 = 3
+1000 = 8
+
+1000 = 8
+0011 = 3
+0010 = 2
+0001 = 1
+
+};
+
+DataFrame::DataFrame() {
+}
+
+DataFrame::~DataFrame() {
+}
+
+vector<vector<string>> readCSV(const string& filename) {
+    vector<vector<string>> data;
+    ifstream file(filename);
     
     if (!file.is_open()) {
-        std::cerr << "Failed to open file: " << filename << std::endl;
+        cerr << "Failed to open file: " << filename << endl;
         return data;
     }
 
-    std::string line;
-    while (std::getline(file, line)) {
-        std::vector<std::string> row;
-        std::stringstream ss(line);
-        std::string cell;
+    string line;
+    while (getline(file, line)) {
+        vector<string> row;
+        stringstream ss(line);
+        string cell;
 
-        while (std::getline(ss, cell, ';')) {
+        while (getline(ss, cell, ';')) {
             row.push_back(cell);
         }
 
@@ -32,14 +65,12 @@ vector<vector<string>> readCSV(const std::string& filename) {
     return data;
 }
 
-int main() {
-    auto data = readCSV("/home/jacopown/Repos/asmara/dataset/data/raw_data/indoor/in_bas_01_A.csv");
-    
-    for (const auto& row : data) {
-        for (const auto& cell : row) {
-            std::cout << cell << "\t";
+int printCSV(const vector<vector<string>>& data) {
+    for (const vector<string>& row : data) {
+        for (const string& cell : row) {
+            cout << cell << "\t";
         }
-        std::cout << std::endl;
+        cout << endl;
     }
 
     return 0;
