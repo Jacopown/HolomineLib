@@ -9,35 +9,13 @@ using namespace std;
 
 class DataFrame {
 public:
-        vector<int> 
-        DataFrame();
-        DataFrame(DataFrame &&) = default;
-        DataFrame(const DataFrame &) = default;
-        DataFrame &operator=(DataFrame &&) = default;
-        DataFrame &operator=(const DataFrame &) = default;
-        ~DataFrame();
-
-private:
-       0x01 02 03 08
-               08 03 02 01 
-
-0001 = 1
-0010 = 2
-0011 = 3
-1000 = 8
-
-1000 = 8
-0011 = 3
-0010 = 2
-0001 = 1
+  vector<int> timestamp; 
+  vector<int> X; 
+  vector<int> Y; 
+  vector<int> Z; 
+  DataFrame(const string& filename);
 
 };
-
-DataFrame::DataFrame() {
-}
-
-DataFrame::~DataFrame() {
-}
 
 vector<vector<string>> readCSV(const string& filename) {
     vector<vector<string>> data;
