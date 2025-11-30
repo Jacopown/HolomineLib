@@ -6,12 +6,15 @@ using namespace std;
 
 class DataFrame {
 public:
+  DataFrame(const string& filename);
+
+private:
   vector<int> timestamp; 
   vector<int> X; 
   vector<int> Y; 
   vector<int> Z; 
-  DataFrame();
 };
+
 
 vector<vector<string>> readCSV(const string& filename); 
 

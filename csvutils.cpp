@@ -1,20 +1,39 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <stdexcept>
 #include <vector>
 #include <string>
 #include "csvutils.h"
 
 using namespace std;
 
-class DataFrame {
-public:
-  vector<int> timestamp; 
-  vector<int> X; 
-  vector<int> Y; 
-  vector<int> Z; 
-  DataFrame(const string& filename);
+DataFrame::DataFrame(const string& filename) {
+    vector<vector<string>> data;
+    ifstream file(filename);
+    
+    if (!file.is_open()) {
+        throw std::invalid_argument("failed to open file: " + filename);
+    }
+    string line;
+    while (getline(file, line)) {
+        vector<string> row;
+        stringstream ss(line);
+        string cell;
 
+        getline(ss, cell, ';');
+        timestamp.push_back(stoi(cell));
+
+        getline(ss, cell, ';');
+        X.push_back(stoi(cell));
+
+        getline(ss, cell, ';');
+        Y.push_back(stoi(cell));
+
+        getline(ss, cell, ';');
+        Z.push_back(stoi(cell));
+    }
+    file.close();
 };
 
 vector<vector<string>> readCSV(const string& filename) {
@@ -22,7 +41,7 @@ vector<vector<string>> readCSV(const string& filename) {
     ifstream file(filename);
     
     if (!file.is_open()) {
-        cerr << "Failed to open file: " << filename << endl;
+        cerr << "failed to open file: " << filename << endl;
         return data;
     }
 
