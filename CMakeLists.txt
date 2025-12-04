@@ -10,7 +10,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # Define the source files that make up the library/module
 set(MODULE_SOURCES
-    positionLoader.cpp
+    Position.cpp
+    Signal.cpp
 )
 
 # 1. Create a library target (optional, but good practice for modules)
@@ -20,7 +21,7 @@ set(MODULE_SOURCES
 
 # 2. Define the executable target
 # This compiles main.cpp
-add_executable(HolomineLib main.cpp positionLoader.cpp)
+add_executable(HolomineLib main.cpp Position.cpp Signal.cpp)
 
 # 3. Link the executable to the library
 # This tells the linker to connect the function calls in main.o 

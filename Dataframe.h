@@ -15,12 +15,13 @@ class Dataframe {
     size_t getSize() const {return size; };
 
   protected:
+    void setSize(int n) { size = n; };
     size_t size;
 };
 
 class Position: public Dataframe {
   public:
-    Position(const string& filename);
+    Position(const string& filename, const char separator);
     void print(size_t startingindex, size_t lastindex) const override;
   private:
     struct datapoint {
@@ -36,8 +37,8 @@ class Signal: public Dataframe {
     void print(size_t startingindex, size_t lastindex) const override;
   private:
     struct datapoint {
-      long timestamp;
-      double P, P_I, P_Q;
+      long long timestamp;
+      double frequency, I, Q;
     };
     vector<datapoint> data;
 };
