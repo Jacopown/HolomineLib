@@ -11,7 +11,7 @@
 
 using namespace std;
 
-Position::Position(const string& filename) {
+Position::Position(const string& filename, const char separator) {
   ifstream file(filename);
   
   if (!file.is_open()) {
@@ -23,16 +23,16 @@ Position::Position(const string& filename) {
       string cell;
       datapoint datapoint;
 
-      getline(ss, cell, ';');
-      datapoint.timestamp = stol(cell);
+      getline(ss, cell, separator);
+      datapoint.timestamp = stol(cell)*1000;
 
-      getline(ss, cell, ';');
+      getline(ss, cell, separator);
       datapoint.x = stod(cell)/1000;
 
-      getline(ss, cell, ';');
+      getline(ss, cell, separator);
       datapoint.y = stod(cell)/1000;
 
-      getline(ss, cell, ';');
+      getline(ss, cell, separator);
       datapoint.z = stod(cell)/1000;
 
       data.push_back(datapoint);
@@ -47,6 +47,7 @@ Position::Position(const string& filename) {
     data.end()
   );
 
+  // TODO: Check if size is correctly setted 
   size = data.size();
 };
 
