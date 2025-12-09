@@ -24,7 +24,7 @@ Position::Position(const string& filename, const char separator) {
       datapoint datapoint;
 
       getline(ss, cell, separator);
-      datapoint.timestamp = stol(cell)*1000;
+      datapoint.timestamp = stoll(cell)*1000;
 
       getline(ss, cell, separator);
       datapoint.x = stod(cell)/1000;
@@ -39,6 +39,7 @@ Position::Position(const string& filename, const char separator) {
 
   }
 
+  // TODO: Remove hard coded check spot
   double H = data[2500].z;
   data.erase(remove_if(data.begin(), data.end(), 
         [H](const datapoint& p) {
@@ -46,6 +47,8 @@ Position::Position(const string& filename, const char separator) {
             }),
     data.end()
   );
+  firstTimestamp = data[0].timestamp;
+  lastTimestamp = data[data.size()-1].timestamp;
 
   // TODO: Check if size is correctly setted 
   size = data.size();

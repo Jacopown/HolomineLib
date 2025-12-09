@@ -2,7 +2,6 @@
 #include <cstddef>
 #include <vector>
 #include <string>
-#include <memory>
 
 using namespace std;
 
@@ -23,9 +22,13 @@ class Position: public Dataframe {
   public:
     Position(const string& filename, const char separator);
     void print(size_t startingindex, size_t lastindex) const override;
+    long long getFirstTimestamp() const { return firstTimestamp; };
+    long long getLastTimestamp() const { return lastTimestamp; };
   private:
+    long long firstTimestamp;
+    long long lastTimestamp;
     struct datapoint {
-      long timestamp;
+      long long timestamp;
       double x, y, z;
     };
     vector<datapoint> data;
@@ -33,7 +36,7 @@ class Position: public Dataframe {
 
 class Signal: public Dataframe {
   public:
-    Signal(const string& filename);
+    Signal(const string& filename, const long long& firstTimestamp, const long long& lastTimestamp);
     void print(size_t startingindex, size_t lastindex) const override;
   private:
     struct datapoint {

@@ -12,7 +12,7 @@
 
 using namespace std;
 
-Signal::Signal(const string& filename) {
+Signal::Signal(const string& filename, const long long& firstTimestamp, const long long& lastTimestamp) {
   ifstream file(filename);
   
   if (!file.is_open()) {
@@ -42,24 +42,26 @@ Signal::Signal(const string& filename) {
 
       datapoint.timestamp = (static_cast<long long>(utc_seconds) * 1000000) + micros;
 
-      getline(ss, cell, ' ');
-      datapoint.frequency = stod(cell);
-
-      for(int i=0; i<5; ++i) {
+      if (datapoint.timestamp >= firstTimestamp && datapoint.timestamp <= lastTimestamp) {
         getline(ss, cell, ' ');
+        datapoint.frequency = stod(cell);
+
+        for(int i=0; i<5; ++i) {
+          getline(ss, cell, ' ');
+        }
+
+        getline(ss, cell, ' ');
+        double Mod = stod(cell);
+
+        getline(ss, cell, ' ');
+        double Phase = stod(cell);
+
+        datapoint.I = Mod*sin(Phase);
+        datapoint.Q = Mod*cos(Phase);
+
+        data.push_back(datapoint);
+        setSize(getSize() + 1);
       }
-
-      getline(ss, cell, ' ');
-      double Mod = stod(cell);
-
-      getline(ss, cell, ' ');
-      double Phase = stod(cell);
-
-      datapoint.I = Mod*sin(Phase);
-      datapoint.Q = Mod*cos(Phase);
-
-      data.push_back(datapoint);
-      setSize(getSize() + 1);
   }
 };
 
