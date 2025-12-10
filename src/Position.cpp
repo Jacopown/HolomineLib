@@ -9,19 +9,17 @@
 #include <cmath>
 #include "HolomineLib/Dataframe.h"
 
-using namespace std;
-
-Position::Position(const string& filename, const char separator) {
-  ifstream file(filename);
+Position::Position(const std::string& filename, const char separator) {
+  std::ifstream file(filename);
   
   if (!file.is_open()) {
-      throw invalid_argument("failed to open file: " + filename);
+      throw std::invalid_argument("failed to open file: " + filename);
   }
-  string line;
+  std::string line;
   while (getline(file, line)) {
-      stringstream ss(line);
-      string cell;
-      datapoint datapoint;
+    std::stringstream ss(line);
+    std::string cell;
+      positionDatapoint datapoint;
 
       getline(ss, cell, separator);
       datapoint.timestamp = stoll(cell)*1000;
@@ -42,7 +40,7 @@ Position::Position(const string& filename, const char separator) {
   // TODO: Remove hard coded check spot
   double H = data[2500].z;
   data.erase(remove_if(data.begin(), data.end(), 
-        [H](const datapoint& p) {
+        [H](const positionDatapoint& p) {
             return fabs(p.z - H) > 1.0;
             }),
     data.end()
@@ -56,6 +54,6 @@ Position::Position(const string& filename, const char separator) {
 
 void Position::print(size_t startingIndex, size_t lastIndex) const {
   for (size_t i = startingIndex; i < lastIndex; i++) {
-    cout << data[i].timestamp << " " << data[i].x << " " << data[i].y << " " << data[i].z << "\n"; 
+    std::cout << data[i].timestamp << " " << data[i].x << " " << data[i].y << " " << data[i].z << "\n"; 
   }
 }
