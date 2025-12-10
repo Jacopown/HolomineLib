@@ -10,29 +10,27 @@
 #include <cmath>
 #include "HolomineLib/Dataframe.h"
 
-using namespace std;
-
-Signal::Signal(const string& filename, const long long& firstTimestamp, const long long& lastTimestamp) {
-  ifstream file(filename);
+Signal::Signal(const std::string& filename, const long long& firstTimestamp, const long long& lastTimestamp) {
+  std::ifstream file(filename);
   
   if (!file.is_open()) {
-      throw invalid_argument("failed to open file: " + filename);
+      throw std::invalid_argument("failed to open file: " + filename);
   }
-  string line;
+  std::string line;
 
   //["DATE", "FREQUENCY_TX", "FREQUENCY_RX", "MOD_I", "PHASE_I", "MOD_Q", "PHASE_Q", "MOD", "PHASE"];
   if (getline(file, line))
 
   while (getline(file, line)) {
-      stringstream ss(line);
-      string cell;
-      datapoint datapoint;
+    std::stringstream ss(line);
+    std::string cell;
+    signalDatapoint datapoint;
 
       getline(ss, cell, ' ');
       tm t = {};
       std::istringstream date_ss(cell);
       
-      date_ss >> get_time(&t, "%Y/%m/%d-%H:%M:%S"); 
+      date_ss >> std::get_time(&t, "%Y/%m/%d-%H:%M:%S"); 
       
       char dot;
       int micros = 0;
@@ -58,6 +56,8 @@ Signal::Signal(const string& filename, const long long& firstTimestamp, const lo
 
         datapoint.I = Mod*sin(Phase);
         datapoint.Q = Mod*cos(Phase);
+        datapoint.x = 0;
+        datapoint.y = 0;
 
         data.push_back(datapoint);
         setSize(getSize() + 1);
@@ -67,6 +67,6 @@ Signal::Signal(const string& filename, const long long& firstTimestamp, const lo
 
 void Signal::print(size_t startingIndex, size_t lastIndex) const {
   for (size_t i = startingIndex; i < lastIndex; i++) {
-    cout << data[i].timestamp << " " << data[i].frequency << " " << data[i].I << " " << data[i].Q << "\n"; 
+    std::cout << data[i].timestamp << " " << data[i].x << " " << data[i].y << " " << data[i].frequency << " " << data[i].I << " " << data[i].Q << "\n"; 
   }
 }

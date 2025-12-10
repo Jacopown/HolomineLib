@@ -9,6 +9,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 add_library(CoreLib
     src/Position.cpp
     src/Signal.cpp
+    src/map.cpp
 )
 
 target_include_directories(CoreLib PUBLIC ${PROJECT_SOURCE_DIR}/include)
