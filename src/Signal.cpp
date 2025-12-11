@@ -8,7 +8,7 @@
 #include <vector>
 #include <string>
 #include <cmath>
-#include "HolomineLib/Dataframe.h"
+#include "HolomineLib/Dataframe.hpp"
 
 Signal::Signal(const std::string& filename, const long long& firstTimestamp, const long long& lastTimestamp) {
   std::ifstream file(filename);
@@ -68,5 +68,80 @@ Signal::Signal(const std::string& filename, const long long& firstTimestamp, con
 void Signal::print(size_t startingIndex, size_t lastIndex) const {
   for (size_t i = startingIndex; i < lastIndex; i++) {
     std::cout << data[i].timestamp << " " << data[i].x << " " << data[i].y << " " << data[i].frequency << " " << data[i].I << " " << data[i].Q << "\n"; 
+  }
+}
+
+double intep1d(double& x1, double& x2, long long& y1, long long& y2, long long& yNew) {
+  // (x_2 - x_1)
+  double op1 = x2 - x1; 
+  // (date_new - date_1)
+  double op2 = yNew - y1;
+  // (date_2-date_1)
+  double op3 = y2 - y1;
+  // x_new = x_1 + (x_2 - x_1) * (date_new - date_1)/(date_2-date_1)
+  double signalX = x1 + op1 * (op2 / op3);
+  if (signalX < 0) {
+  }
+
+  return signalX;
+}
+
+void Signal::mapOver(const Position& position) {
+  std::vector<positionDatapoint> positionData = position.getData();
+  int startingIndex = 0;
+  double minX = std::numeric_limits<double>::max();
+  double minY = std::numeric_limits<double>::max();
+  double width = std::numeric_limits<double>::min();
+  double length = std::numeric_limits<double>::min();;
+  for (std::size_t i = 0; i < size ; i++) {
+    for (std::size_t j = startingIndex; j < position.getSize(); j++) {
+      if ( positionData[j].timestamp == data[i].timestamp ) {
+        setX(i, positionData[j].x);
+        setY(i, positionData[j].y);
+
+        if (positionData[j].x > width)
+          width = positionData[j].x;
+        if (positionData[j].y > length)
+          length = positionData[j].y;
+        if (positionData[j].x < minX)
+          minX = positionData[j].x;
+        if (positionData[j].y < minY)
+          minY = positionData[j].y;
+
+        setWidth(width);
+        setLength(length);
+        setMinX(minX);
+        setMinY(minY);
+
+        startingIndex = j;
+        break;
+
+      } else if (position.getData()[j].timestamp > data[i].timestamp) {
+        double signalX = intep1d(positionData[j-1].x, positionData[j].x, positionData[j-1].timestamp, positionData[j].timestamp, data[i].timestamp);
+        double signalY = intep1d(positionData[j-1].y, positionData[j].y, positionData[j-1].timestamp, positionData[j].timestamp, data[i].timestamp);
+
+        setX(i, signalX);
+        setY(i, signalY);
+
+        if (signalX > width)
+          width = signalX;
+        if (signalY > length)
+          length = signalY;
+        if (signalX < minX)
+          minX = signalX;
+        if (signalY < minY)
+          minY = signalY;
+        
+        setWidth(width);
+        setLength(length);
+        setMinX(minX);
+        setMinY(minY);
+
+        startingIndex = j;
+        break;
+      }
+      startingIndex = j;
+      
+    }
   }
 }

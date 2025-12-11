@@ -7,7 +7,7 @@
 #include <vector>
 #include <string>
 #include <cmath>
-#include "HolomineLib/Dataframe.h"
+#include "HolomineLib/Dataframe.hpp"
 
 Position::Position(const std::string& filename, const char separator) {
   std::ifstream file(filename);
