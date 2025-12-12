@@ -1,4 +1,5 @@
 #pragma once
+#include <complex>
 #include <cstddef>
 #include <vector>
 #include <string>
@@ -10,7 +11,7 @@ struct positionDatapoint {
 
 struct signalDatapoint {
   long long timestamp;
-  double x, y, frequency, Mod, Phase;
+  double x, y, Mod, Phase;
 };
 
 class Data {
@@ -73,18 +74,13 @@ class SignalLog: public LogData<signalDatapoint> {
 
 class Hologram: public Data {
   public:
-    Hologram(const SignalLog& SignalLog, int step);
+    Hologram(const SignalLog& SignalLog, int xStep, int yStep);
 
     void print(size_t startingindex, size_t lastindex) const override;
-    void makeHologram();
-    void saveModImage(const std::string& path);
-    void savePhaseImage(const std::string& path);
-    void saveHologramImage(const std::string& path);
+    void saveImage(const std::string& path, bool real);
 
   private:
-    std::vector<float>Mod;
-    std::vector<float>Phase;
-    std::vector<float>hologram2d;
+    std::vector<std::complex<double>>hologram2d;
     int width;
     int height;
 };
