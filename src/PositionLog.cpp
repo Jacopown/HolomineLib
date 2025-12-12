@@ -9,7 +9,7 @@
 #include <cmath>
 #include "HolomineLib/Dataframe.hpp"
 
-Position::Position(const std::string& filename, const char separator) {
+PositionLog::PositionLog(const std::string& filename, const char separator) {
   std::ifstream file(filename);
   
   if (!file.is_open()) {
@@ -52,7 +52,7 @@ Position::Position(const std::string& filename, const char separator) {
   size = data.size();
 };
 
-void Position::print(size_t startingIndex, size_t lastIndex) const {
+void PositionLog::print(size_t startingIndex, size_t lastIndex) const {
   for (size_t i = startingIndex; i < lastIndex; i++) {
     std::cout << data[i].timestamp << " " << data[i].x << " " << data[i].y << " " << data[i].z << "\n"; 
   }
