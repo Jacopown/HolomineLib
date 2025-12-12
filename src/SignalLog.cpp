@@ -10,7 +10,7 @@
 #include <cmath>
 #include "HolomineLib/Dataframe.hpp"
 
-Signal::Signal(const std::string& filename, const long long& firstTimestamp, const long long& lastTimestamp) {
+SignalLog::SignalLog(const std::string& filename, const long long& firstTimestamp, const long long& lastTimestamp) {
   std::ifstream file(filename);
   
   if (!file.is_open()) {
@@ -49,13 +49,11 @@ Signal::Signal(const std::string& filename, const long long& firstTimestamp, con
         }
 
         getline(ss, cell, ' ');
-        double Mod = stod(cell);
+        datapoint.Mod = stod(cell);
 
         getline(ss, cell, ' ');
-        double Phase = stod(cell);
+        datapoint.Phase = stod(cell);
 
-        datapoint.I = Mod*sin(Phase);
-        datapoint.Q = Mod*cos(Phase);
         datapoint.x = 0;
         datapoint.y = 0;
 
@@ -65,9 +63,9 @@ Signal::Signal(const std::string& filename, const long long& firstTimestamp, con
   }
 };
 
-void Signal::print(size_t startingIndex, size_t lastIndex) const {
+void SignalLog::print(size_t startingIndex, size_t lastIndex) const {
   for (size_t i = startingIndex; i < lastIndex; i++) {
-    std::cout << data[i].timestamp << " " << data[i].x << " " << data[i].y << " " << data[i].frequency << " " << data[i].I << " " << data[i].Q << "\n"; 
+    std::cout << data[i].timestamp << " " << data[i].x << " " << data[i].y << " " << data[i].frequency << " " << data[i].Mod << " " << data[i].Phase << "\n"; 
   }
 }
 
@@ -86,7 +84,7 @@ double intep1d(double& x1, double& x2, long long& y1, long long& y2, long long& 
   return signalX;
 }
 
-void Signal::mapOver(const Position& position) {
+void SignalLog::mapOver(const PositionLog& position) {
   std::vector<positionDatapoint> positionData = position.getData();
   int startingIndex = 0;
   double minX = std::numeric_limits<double>::max();
