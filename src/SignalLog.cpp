@@ -3,11 +3,11 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <limits>
 #include <sstream>
 #include <stdexcept>
 #include <vector>
 #include <string>
-#include <cmath>
 #include "HolomineLib/Dataframe.hpp"
 
 SignalLog::SignalLog(const std::string& filename, const long long& firstTimestamp, const long long& lastTimestamp) {
@@ -41,10 +41,7 @@ SignalLog::SignalLog(const std::string& filename, const long long& firstTimestam
       datapoint.timestamp = (static_cast<long long>(utc_seconds) * 1000000) + micros;
 
       if (datapoint.timestamp >= firstTimestamp && datapoint.timestamp <= lastTimestamp) {
-        getline(ss, cell, ' ');
-        datapoint.frequency = stod(cell);
-
-        for(int i=0; i<5; ++i) {
+        for(int i=0; i<6; ++i) {
           getline(ss, cell, ' ');
         }
 
@@ -65,7 +62,7 @@ SignalLog::SignalLog(const std::string& filename, const long long& firstTimestam
 
 void SignalLog::print(size_t startingIndex, size_t lastIndex) const {
   for (size_t i = startingIndex; i < lastIndex; i++) {
-    std::cout << data[i].timestamp << " " << data[i].x << " " << data[i].y << " " << data[i].frequency << " " << data[i].Mod << " " << data[i].Phase << "\n"; 
+    std::cout << data[i].timestamp << " " << data[i].x << " " << data[i].y << " " << data[i].Mod << " " << data[i].Phase << "\n"; 
   }
 }
 
