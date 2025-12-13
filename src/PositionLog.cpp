@@ -15,6 +15,11 @@ PositionLog::PositionLog(const std::string& filename, const char separator) {
   if (!file.is_open()) {
       throw std::invalid_argument("failed to open file: " + filename);
   }
+
+  if (file.peek() == EOF) {
+    setSize(0);
+    return;
+  }
   std::string line;
   while (getline(file, line)) {
     std::stringstream ss(line);
@@ -48,7 +53,6 @@ PositionLog::PositionLog(const std::string& filename, const char separator) {
   firstTimestamp = data[0].timestamp;
   lastTimestamp = data[data.size()-1].timestamp;
 
-  // TODO: Check if size is correctly setted 
   size = data.size();
 };
 

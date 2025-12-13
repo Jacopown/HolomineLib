@@ -32,8 +32,6 @@ template<typename datapoint>
 class LogData: public Data {
   public:
     std::vector<datapoint> getData() const {return data; };
-    void setX(int index, double value) { data[index].x = value; };
-    void setY(int index, double value) { data[index].y = value; };
 
   protected:
     std::vector<datapoint> data;
