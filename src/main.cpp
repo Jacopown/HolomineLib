@@ -51,10 +51,15 @@ int main() {
   std::cout << "\nFound " << pairs.size() << " complete couples.\n";
   auto start = std::chrono::high_resolution_clock::now();
   for (size_t i = 1; i < pairs.size(); i++) {
+    std::cout << "\nPair ready for processing:\n";
+    std::cout << pairs[i].logPath.filename() << "\n";
+    std::cout << pairs[i].csvPath.filename() << "\n";
 
     PositionLog position(pairs[i].csvPath, ';');
+    std::cout << "Position size: " << position.getSize() << "\n";
     SignalLog signal(pairs[i].logPath, position.getFirstTimestamp(),
                      position.getLastTimestamp());
+    std::cout << "Signal size: " << signal.getSize() << "\n";
     signal.mapOver(position);
     if (signal.getSize() >0) {
       Hologram hologram(signal, 5, 5);
